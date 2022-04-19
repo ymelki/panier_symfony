@@ -72,9 +72,11 @@ class CartController extends AbstractController
         $cart->remove($id);
 
         // on redirige
-        return $this->redirectToRoute('app_cart_view');
-
-
-
+        return $this->redirectToRoute('app_cart_view'); 
     }
 }
+// faire en sorte que lorsque le panier est vide la vue fonctionne
+// une problématique SQL
+// on verra l'utilisation de STRIPE 
+// Hebergement
+// Mail

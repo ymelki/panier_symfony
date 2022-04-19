@@ -15,6 +15,19 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ProduitController extends AbstractController
 {
+
+    /**
+     * @Route("/voir/{id}", name="app_produit_voir", methods={"GET"})
+     */
+    public function view($id,ProduitRepository $produitRepository): Response
+    {
+        return $this->render('produit/index.html.twig', [
+            'produits' => $produitRepository->findBy( ['categories' => $id]),
+        ]);
+    }
+
+
+
     /**
      * @Route("/", name="app_produit_index", methods={"GET"})
      */
