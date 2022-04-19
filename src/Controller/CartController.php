@@ -36,15 +36,28 @@ class CartController extends AbstractController
         //Cas N2 : Le panier existe , la session existe : je modifie la session
         $cart =  $request->getSession()->get('cart' , []);
 
+
+        // Cas N3 : Le panier existe , je rajouter un produit deja existant quantite ++.
+        // si le tableau contient la clé identifiant correspondant au produit
+        // alors je rajoute une quantité ++
+        // si non je suis dans le cas classique
+        if (array_key_exists( $id, $cart) ) {
+            $cart[$id] = $cart[$id] + 1 ;
+        }
+        else {
         // Ajouter dans le tableau  [] l'identifiant et la quantité = 1
         // $cart[ identifiant du produit  ] = Quantité 1 par défaut
         $cart[$id] = 1;
-
+        }
+  
         // on ecrit dans la session nommé 'cart' la variable $cart contenant []
+        // on genere un fichier sur le serveur
         $request->getSession()->set('cart',$cart);
+
 
         // affiche la session
         dd($cart);
+        //die arrete l execution--------------------------------
 
         // Vardump et Die 
         dd($id);
