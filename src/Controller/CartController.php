@@ -2,23 +2,61 @@
 
 namespace App\Controller;
 
+use App\Repository\ProduitRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CartController extends AbstractController
 {
 
+     // voir le panier 
+    /**
+     * @Route("/cart/view", name="app_cart_view")
+     */
+    public function view(Request $request, SessionInterface $session, ProduitRepository $produitRepository): Response
+    {  
+
+       // Recuperation du panier
+       // Si il existe on aura le tableau rempli sinon un tableau vide
+        $cart=$session->get('cart' , []);
+       
+        // boucle sur le tableau : identifiant_produit => quantité
+        // Recuperer les données du produits
+        foreach ($cart as $key=>$value){
+            $cart_full[]=[
+                'product'=>   $produitRepository->find($key) ,
+                'quantite'=>$value
+                
+            ];
+
+            // Calcul du TOTAL uniquement
+           $total=0;
+           foreach ($cart_full as $couple){
+               $total=$total + ($couple['product']->getPrix()*$couple['quantite']);
+           }
+          
+
+        }
+ //       dd($cart_full);
+        return $this->render('cart/view.html.twig', [
+            'controller_name' => 'CartController',
+            'rows'=>$cart_full,
+            'total'=>$total
+        ]);
+
+    }
 
     // vider le panier 
     /**
      * @Route("/cart/clear", name="app_cart_clear")
      */
-    public function clear(Request $request): Response
+    public function clear(Request $request, SessionInterface $session): Response
     { 
         // supprimer la variable cart contenant un tableau enregistré en session
-        $request->getSession()->remove('cart');
+        $session->remove('cart');
 
         return $this->render('cart/index.html.twig', [
             'controller_name' => 'CartController',
@@ -30,11 +68,11 @@ class CartController extends AbstractController
     /**
      * @Route("/cart/add/{id}", name="app_cart")
      */
-    public function index($id, Request $request): Response
+    public function index($id, Request $request, SessionInterface  $session): Response
     { 
         //Cas N1 : Le panier n'existe pas , la session n'existe pas : je créé la session
         //Cas N2 : Le panier existe , la session existe : je modifie la session
-        $cart =  $request->getSession()->get('cart' , []);
+        $cart =  $session->get('cart' , []);
 
 
         // Cas N3 : Le panier existe , je rajouter un produit deja existant quantite ++.
@@ -52,7 +90,7 @@ class CartController extends AbstractController
   
         // on ecrit dans la session nommé 'cart' la variable $cart contenant []
         // on genere un fichier sur le serveur
-        $request->getSession()->set('cart',$cart);
+        $session->set('cart',$cart);
 
 
         // affiche la session

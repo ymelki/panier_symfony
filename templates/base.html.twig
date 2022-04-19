@@ -13,6 +13,9 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+        <a href="{{ path('app_produit_index') }}" class="btn btn-primary">Voir les produits</a>
+        <a href="{{ path('app_cart_view') }}" class="btn btn-primary">Voir le panier</a>
+         <a href="{{ path('app_cart_clear') }}" class="btn btn-primary">Vider le panier</a>
     </head>
     <body>
         {% block body %}{% endblock %}
