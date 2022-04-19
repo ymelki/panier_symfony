@@ -59,4 +59,20 @@ class CartController extends AbstractController
             'controller_name' => 'CartController',
         ]);
     }
+
+    /**
+     * @Route("/cart/remove/{id}", name="app_remove")
+     */
+    public function remove($id,SessionInterface $session){
+        $cart=$session->get('cart' , []);
+
+        if (!empty($cart[$id])){
+            unset($cart[$id]);
+        }
+
+        $session->set('cart',$cart);
+        
+        return $this->redirectToRoute('app_cart_view');
+
+    }
 }

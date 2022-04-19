@@ -21,6 +21,7 @@
                 <th>Prix</th>
                 <th>quantite</th>
                 <th>total</th>
+                <th>Supprimer</th>
             </tr>
         </thead> 
      
@@ -31,8 +32,10 @@
                 <td>{{ row.product.nom }}</td>
                 <td>{{ row.product.prix }}</td>
                 <td>{{ row.quantite }}</td>
-                <td>{{ row.quantite * row.product.prix }}</td>
-
+                <td>{{ row.quantite * row.product.prix }}</td> 
+                <td>
+                    <a href="{{ path('app_remove', {'id': row.product.id}) }}">Supprimer du panier</a>
+                </td>
             </tr>
         {% else %}
             <tr>

@@ -34,10 +34,12 @@ class Cart {
         // $cart[ identifiant du produit  ] = Quantité 1 par défaut
         $cart[$id] = 1;
         }
+        
   
         // on ecrit dans la session nommé 'cart' la variable $cart contenant []
         // on genere un fichier sur le serveur
         $this->session->set('cart',$cart);
+ 
 
 
 
@@ -75,18 +77,14 @@ class Cart {
                 'product'=> $this->produitRepository->find($id) ,
                 'quantite'=>$quantite
             ];
-            
-
-            
+                        
             // Calcul du TOTAL uniquement
           //  var_dump($cart_full);
- 
-       
-
-           return $cart_full;
+            
           
 
         }
+        return $cart_full;
     }
 
     public function getTotal(){
