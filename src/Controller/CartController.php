@@ -19,9 +19,13 @@ class CartController extends AbstractController
      */
     public function view(Request $request, SessionInterface $session, ProduitRepository $produitRepository, Cart $cart): Response
     {  
+
+ 
         $cart_full=$cart->getFull();
+       
         $total=$cart->getTotal();
-    
+        
+   
         //       dd($cart_full);
         return $this->render('cart/view.html.twig', [
             'controller_name' => 'CartController',
@@ -63,16 +67,14 @@ class CartController extends AbstractController
     /**
      * @Route("/cart/remove/{id}", name="app_remove")
      */
-    public function remove($id,SessionInterface $session){
-        $cart=$session->get('cart' , []);
+    public function remove($id,Cart $cart){
+        // on utilise le service pour supprimer de notre panier
+        $cart->remove($id);
 
-        if (!empty($cart[$id])){
-            unset($cart[$id]);
-        }
-
-        $session->set('cart',$cart);
-        
+        // on redirige
         return $this->redirectToRoute('app_cart_view');
+
+
 
     }
 }

@@ -11,7 +11,7 @@
 <div class="example-wrapper">
     <h1>Votre panier ! </h1>
  
-
+    {% if rows | length > 0 %}
 
     <table class="table">
         <thead>
@@ -45,8 +45,15 @@
         </tbody>
     </table>
 
+
+
     <br />
     Total : {{ total }}
+
+    {% else %}
+    Le panier est vide
+
+    {% endif %}
 
 </div>
 {% endblock %}

@@ -51,7 +51,8 @@ class Cart {
         $this->session->remove('cart');
     }
 
-    public function getFull():array{
+    public function getFull() {
+        
                // Recuperation du panier
        // Si il existe on aura le tableau rempli sinon un tableau vide
        $cart=$this->session->get('cart' , []);
@@ -64,26 +65,30 @@ class Cart {
         */
         // boucle sur le tableau : identifiant_produit => quantité
         // Recuperer les données du produits
-        foreach ($cart as $id=>$quantite){
-            //  $cart[5]=3    $cart[34]=2    $cart[7]=7
-           /* 
-           $cart_full[O][produit]=[id=5,nom=chaise,prix=300]
-           $cart_full[O][quantite]=3
-            $cart_full[1][produit]= 
-            $cart_full[1][quantite]=
-             ...
-            */
-            $cart_full[]=[
-                'product'=> $this->produitRepository->find($id) ,
-                'quantite'=>$quantite
-            ];
-                        
-            // Calcul du TOTAL uniquement
-          //  var_dump($cart_full);
-            
-          
+        
 
-        }
+        
+            foreach ($cart as $id=>$quantite){
+                //  $cart[5]=3    $cart[34]=2    $cart[7]=7
+            /* 
+            $cart_full[O][produit]=[id=5,nom=chaise,prix=300]
+            $cart_full[O][quantite]=3
+                $cart_full[1][produit]= 
+                $cart_full[1][quantite]=
+                ...
+                */
+                $cart_full[]=[
+                    'product'=> $this->produitRepository->find($id) ,
+                    'quantite'=>$quantite
+                ];
+                            
+                // Calcul du TOTAL uniquement
+            //  var_dump($cart_full);
+                
+            
+
+            }                   
+        
         return $cart_full;
     }
 
@@ -91,17 +96,36 @@ class Cart {
 
         $cart_full=$this->getFull();
         $total=0;
-        foreach ($cart_full as $couple){
-            var_dump($couple);
-            echo "<br />";
-            $total=$total + ($couple['product']->getPrix()*$couple['quantite']);
-        }
-
+        if ($cart_full!=""){
+        
+            foreach ($cart_full as $couple){
+                var_dump($couple);
+                echo "<br />";
+                $total=$total + ($couple['product']->getPrix()*$couple['quantite']);
+            }
+        }   
         return $total;
 
     }
     
-    public function remove(){
+    public function remove(int $id){
+
+        
+        // on recupere le panier en session
+        $cart=$this->session->get('cart' , []);
+
+
+
+        // on verifie que l'ID est bien présent 
+        // dans le tableau de session
+        if (!empty($cart[$id])){
+            // on supprime du tableau la clé correspondante
+            unset($cart[$id]);
+        }
+
+        // on écrit dans la sessions
+        $this->session->set('cart',$cart);
+
         
     }
 
