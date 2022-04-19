@@ -36,6 +36,10 @@ class CartController extends AbstractController
         //Cas N2 : Le panier existe , la session existe : je modifie la session
         $cart =  $request->getSession()->get('cart' , []);
 
+        // Ajouter dans le tableau  [] l'identifiant et la quantité = 1
+        // $cart[ identifiant du produit  ] = Quantité 1 par défaut
+        $cart[$id] = 1;
+
         // on ecrit dans la session nommé 'cart' la variable $cart contenant []
         $request->getSession()->set('cart',$cart);
 
