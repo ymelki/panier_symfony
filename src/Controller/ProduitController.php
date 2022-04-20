@@ -25,9 +25,7 @@ class ProduitController extends AbstractController
             'produits' => $produitRepository->findBy( ['categories' => $id]),
         ]);
     }
-
-
-
+ 
     /**
      * @Route("/", name="app_produit_index", methods={"GET"})
      */

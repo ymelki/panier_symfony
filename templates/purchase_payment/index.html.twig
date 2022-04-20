@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PurchasePaymentController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+   Paiement de {{ total }} €
+  <!-- Display a payment form -->
+    <form id="payment-form">
+      <div id="payment-element">
+        <!--Stripe.js injects the Payment Element-->
+      </div>
+      <div id ="error-message"></div>
+      <button id="submit" class="btn btn-success">
+        <div class="spinner hidden" id="spinner"></div>
+        <span id="button-text">Payer avec Stripe</span>
+      </button>
+      <div id="payment-message" class="hidden"></div>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+     <script src="https://js.stripe.com/v3/"></script>
+     <script>
+    const stripe = Stripe("pk_test_51KqHUhHxTuewjfx8zjgrsWL4zkNL4VV30JoVq0FSpI9wlaiGGklJmR4TIryyh5j1FF5UBiAVd9kSWw16RbduwTaf0077PW6j1F");
+
+ 
+ const options = {
+  clientSecret: '{{clientSecret}}' 
+};
+
+// Set up Stripe.js and Elements to use in checkout form, passing the client secret obtained in step 2
+const elements = stripe.elements(options);
+
+// Create and mount the Payment Element
+const paymentElement = elements.create('payment');
+paymentElement.mount('#payment-element');
+
+     
+
+const form = document.getElementById('payment-form');
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const {error} = await stripe.confirmPayment({
+    //`Elements` instance that was used to create the Payment Element
+    //http://127.0.0.1:8000/purchase/payment/success/
+    elements,
+    confirmParams: {
+      return_url: "{{ url('app_purchase_payment_success') }}",
+    },
+  });
+
+  if (error) {
+    // This point will only be reached if there is an immediate error when
+    // confirming the payment. Show error to your customer (for example, payment
+    // details incomplete)
+    const messageContainer = document.querySelector('#error-message');
+    messageContainer.textContent = error.message;
+  } else {
+    // Your customer will be redirected to your `return_url`. For some payment
+    // methods like iDEAL, your customer will be redirected to an intermediate
+    // site first to authorize the payment, then redirected to the `return_url`.
+  }
+});
+     </script>
+
+
+     
+{% endblock %}

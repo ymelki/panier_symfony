@@ -99,8 +99,7 @@ class Cart {
         if ($cart_full!=""){
         
             foreach ($cart_full as $couple){
-                var_dump($couple);
-                echo "<br />";
+                  
                 $total=$total + ($couple['product']->getPrix()*$couple['quantite']);
             }
         }   

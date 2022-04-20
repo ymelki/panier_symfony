@@ -48,9 +48,8 @@ class CartController extends AbstractController
             'controller_name' => 'CartController',
         ]);
 
-    }
-
-
+    } 
+    
     /**
      * @Route("/cart/add/{id}", name="app_cart")
      */
