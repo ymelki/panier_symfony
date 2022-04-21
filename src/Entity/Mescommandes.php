@@ -33,6 +33,12 @@ class Mescommandes
      */
     private $produits;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Facture::class, inversedBy="mescommandes")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $facture;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +76,18 @@ class Mescommandes
     public function setProduits(?Produit $produits): self
     {
         $this->produits = $produits;
+
+        return $this;
+    }
+
+    public function getFacture(): ?Facture
+    {
+        return $this->facture;
+    }
+
+    public function setFacture(?Facture $facture): self
+    {
+        $this->facture = $facture;
 
         return $this;
     }
