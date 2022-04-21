@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProduitRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,6 +34,16 @@ class Produit
      * @ORM\JoinColumn(nullable=false)
      */
     private $categories;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Mescommandes::class, mappedBy="produits")
+     */
+    private $mescommandes;
+
+    public function __construct()
+    {
+        $this->mescommandes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -70,6 +82,36 @@ class Produit
     public function setCategories(?Categorie $categories): self
     {
         $this->categories = $categories;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Mescommandes>
+     */
+    public function getMescommandes(): Collection
+    {
+        return $this->mescommandes;
+    }
+
+    public function addMescommande(Mescommandes $mescommande): self
+    {
+        if (!$this->mescommandes->contains($mescommande)) {
+            $this->mescommandes[] = $mescommande;
+            $mescommande->setProduits($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMescommande(Mescommandes $mescommande): self
+    {
+        if ($this->mescommandes->removeElement($mescommande)) {
+            // set the owning side to null (unless already changed)
+            if ($mescommande->getProduits() === $this) {
+                $mescommande->setProduits(null);
+            }
+        }
 
         return $this;
     }

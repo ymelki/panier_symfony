@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mescommandes index{% endblock %}
+
+{% block body %}
+    <h1>Mescommandes index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Quantite</th>
+                <th>Total</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mescommande in mescommandes %}
+            <tr>
+                <td>{{ mescommande.id }}</td>
+                <td>{{ mescommande.quantite }}</td>
+                <td>{{ mescommande.total }}</td>
+                <td>
+                    <a href="{{ path('app_mescommandes_show', {'id': mescommande.id}) }}">show</a>
+                    <a href="{{ path('app_mescommandes_edit', {'id': mescommande.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_mescommandes_new') }}">Create new</a>
+{% endblock %}
