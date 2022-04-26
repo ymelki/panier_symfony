@@ -10,6 +10,7 @@ use App\Entity\Mescommandes;
 use App\Repository\FactureRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\MescommandesRepository;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -22,7 +23,7 @@ class PurchasePaymentsController extends AbstractController
     /**
      * @Route("/purchase/payments/success", name="app_purchase_payments_success")
      */
-    public function success(FactureRepository $factureRepository, MescommandesRepository $mescommandesRepository, Cart $cart,SessionInterface $session, ProduitRepository $produitRepository): Response
+    public function success(Security $security, FactureRepository $factureRepository, MescommandesRepository $mescommandesRepository, Cart $cart,SessionInterface $session, ProduitRepository $produitRepository): Response
     {
  
 
@@ -37,13 +38,16 @@ class PurchasePaymentsController extends AbstractController
         // Je vais lire mon panier 
         // a chaque identifiant je vais le stocke dans une nouvelle ligne
         // de ma table mescommande
+
+        // recuperation de l'objet user en session
+        $user=$security->getUser();
         $mescommande = new Mescommandes();
         $facture=new Facture();
+        $facture->setUser($user);
         $factureRepository->add($facture);
-        foreach ($cart_s as $id=>$quantite){
 
-            
- 
+
+        foreach ($cart_s as $id=>$quantite){
             // mescommandes correspond à ligne commande
             $mescommande = new Mescommandes();
             

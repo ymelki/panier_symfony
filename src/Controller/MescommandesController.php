@@ -16,12 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class MescommandesController extends AbstractController
 {
     /**
-     * @Route("/", name="app_mescommandes_index", methods={"GET"})
+     * @Route("/{id}", name="app_mescommandes_index", methods={"GET"})
      */
-    public function index(MescommandesRepository $mescommandesRepository): Response
+    public function index(MescommandesRepository $mescommandesRepository,$id): Response
     {
         return $this->render('mescommandes/index.html.twig', [
-            'mescommandes' => $mescommandesRepository->findAll(),
+            'mescommandes' => $mescommandesRepository->findBy(['facture'=>$id]),
         ]);
     }
 
