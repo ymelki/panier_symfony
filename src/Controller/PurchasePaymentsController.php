@@ -10,6 +10,7 @@ use App\Entity\Mescommandes;
 use App\Repository\FactureRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\MescommandesRepository;
+use DateTime;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -43,7 +44,9 @@ class PurchasePaymentsController extends AbstractController
         $user=$security->getUser();
         $mescommande = new Mescommandes();
         $facture=new Facture();
+        // je modifie l'objet facture en mettant le user à l'interieur
         $facture->setUser($user);
+        $facture->setDatecreation(new DateTime());
         $factureRepository->add($facture);
 
 

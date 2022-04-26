@@ -29,6 +29,11 @@ class Facture
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $datecreation;
+
     public function __construct()
     {
         $this->mescommandes = new ArrayCollection();
@@ -77,6 +82,18 @@ class Facture
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getDatecreation(): ?\DateTimeInterface
+    {
+        return $this->datecreation;
+    }
+
+    public function setDatecreation(\DateTimeInterface $datecreation): self
+    {
+        $this->datecreation = $datecreation;
 
         return $this;
     }
